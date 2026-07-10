@@ -1,687 +1,2127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>finperiti &#8212; AML &amp; KYC Compliance Inside Microsoft 365</title>
-  <meta name="description" content="finperiti brings AI-powered AML and KYC onboarding inside Microsoft 365. Automate risk scoring, identity verification and audit trails &#8212; no new portals, no IT project.">
-  <style>
-    @font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url('/fonts/manrope-variable-latin.woff2') format('woff2');}
-    @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/jetbrains-mono-500-latin.woff2') format('woff2');}
-    :root {
-      --ink:#08191C; --petrol:#0E4F5E; --teal:#0E9F90; --bright:#5DE6D2;
-      --steel:#5B6B7C; --mist:#EAF0F1; --surf:#F4F7F8; --white:#FFFFFF;
-      --border:#DDE6E9; --mono:'JetBrains Mono',monospace;
-      --sans:'Manrope',system-ui,sans-serif; --max:1200px; --r:10px;
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{font-size:16px;scroll-behavior:smooth;}
-    body{font-family:var(--sans);color:var(--ink);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased;}
-    img{display:block;max-width:100%;}
-    a{color:inherit;text-decoration:none;}
-    ul{list-style:none;}
-    button{font-family:inherit;cursor:pointer;border:none;background:none;}
-    .wrap{max-width:var(--max);margin:0 auto;padding:0 24px;}
-    .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:500;}
-    .eyebrow-pill{display:inline-block;background:rgba(14,159,144,.1);color:var(--teal);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid rgba(14,159,144,.2);}
-    h1{font-size:clamp(2rem,5vw,3.25rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;color:var(--ink);}
-    h2{font-size:clamp(1.6rem,3.5vw,2.25rem);font-weight:800;line-height:1.15;letter-spacing:-.025em;color:var(--ink);}
-    h3{font-size:1.05rem;font-weight:700;color:var(--ink);}
-    p{color:var(--steel);line-height:1.7;}
-    .lead{font-size:1.1rem;color:var(--steel);max-width:540px;}
-    .sec-sub{font-size:1rem;color:var(--steel);max-width:560px;margin-top:12px;}
-    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--petrol);color:var(--white);padding:13px 26px;border-radius:var(--r);font-size:.95rem;font-weight:600;letter-spacing:-.01em;transition:background .2s,transform .15s;text-decoration:none;}
-    .btn-primary:hover{background:#0a3d4a;transform:translateY(-1px);}
-    .btn-ghost{display:inline-flex;align-items:center;border:1.5px solid var(--border);color:var(--ink);padding:12px 22px;border-radius:var(--r);font-size:.95rem;font-weight:600;transition:border-color .2s,color .2s;text-decoration:none;}
-    .btn-ghost:hover{border-color:var(--petrol);color:var(--petrol);}
-    .btn-white{display:inline-flex;align-items:center;background:var(--white);color:var(--petrol);padding:13px 26px;border-radius:var(--r);font-size:.95rem;font-weight:700;transition:opacity .2s;text-decoration:none;}
-    .btn-white:hover{opacity:.9;}
-    .btn-outline-white{display:inline-flex;align-items:center;border:1.5px solid rgba(255,255,255,.4);color:var(--white);padding:12px 22px;border-radius:var(--r);font-size:.95rem;font-weight:600;transition:border-color .2s;text-decoration:none;}
-    .btn-outline-white:hover{border-color:rgba(255,255,255,.8);}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>finperiti &#8212; AML &amp; KYC Compliance Inside Microsoft 365</title>
+    <meta
+      name="description"
+      content="finperiti brings AI-powered AML and KYC onboarding inside Microsoft 365. Automate risk scoring, identity verification and audit trails &#8212; no new portals, no IT project."
+    />
+    <style>
+      @font-face {
+        font-family: "Manrope";
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: swap;
+        src: url("/fonts/manrope-variable-latin.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url("/fonts/jetbrains-mono-500-latin.woff2") format("woff2");
+      }
+      :root {
+        --ink: #08191c;
+        --petrol: #0e4f5e;
+        --teal: #0e9f90;
+        --bright: #5de6d2;
+        --steel: #5b6b7c;
+        --mist: #eaf0f1;
+        --surf: #f4f7f8;
+        --white: #ffffff;
+        --border: #dde6e9;
+        --mono: "JetBrains Mono", monospace;
+        --sans: "Manrope", system-ui, sans-serif;
+        --max: 1200px;
+        --r: 10px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        font-size: 16px;
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: var(--sans);
+        color: var(--ink);
+        background: var(--white);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      ul {
+        list-style: none;
+      }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        background: none;
+      }
+      .wrap {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--teal);
+        font-weight: 500;
+      }
+      .eyebrow-pill {
+        display: inline-block;
+        background: rgba(14, 159, 144, 0.1);
+        color: var(--teal);
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 500;
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(14, 159, 144, 0.2);
+      }
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.25rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        color: var(--ink);
+      }
+      h2 {
+        font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+        color: var(--ink);
+      }
+      h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      p {
+        color: var(--steel);
+        line-height: 1.7;
+      }
+      .lead {
+        font-size: 1.1rem;
+        color: var(--steel);
+        max-width: 540px;
+      }
+      .sec-sub {
+        font-size: 1rem;
+        color: var(--steel);
+        max-width: 560px;
+        margin-top: 12px;
+      }
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--petrol);
+        color: var(--white);
+        padding: 13px 26px;
+        border-radius: var(--r);
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+        text-decoration: none;
+      }
+      .btn-primary:hover {
+        background: #0a3d4a;
+        transform: translateY(-1px);
+      }
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        border: 1.5px solid var(--border);
+        color: var(--ink);
+        padding: 12px 22px;
+        border-radius: var(--r);
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition:
+          border-color 0.2s,
+          color 0.2s;
+        text-decoration: none;
+      }
+      .btn-ghost:hover {
+        border-color: var(--petrol);
+        color: var(--petrol);
+      }
+      .btn-white {
+        display: inline-flex;
+        align-items: center;
+        background: var(--white);
+        color: var(--petrol);
+        padding: 13px 26px;
+        border-radius: var(--r);
+        font-size: 0.95rem;
+        font-weight: 700;
+        transition: opacity 0.2s;
+        text-decoration: none;
+      }
+      .btn-white:hover {
+        opacity: 0.9;
+      }
+      .btn-outline-white {
+        display: inline-flex;
+        align-items: center;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        color: var(--white);
+        padding: 12px 22px;
+        border-radius: var(--r);
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition: border-color 0.2s;
+        text-decoration: none;
+      }
+      .btn-outline-white:hover {
+        border-color: rgba(255, 255, 255, 0.8);
+      }
 
-    /* NAV */
-    .nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
-    .nav-inner{display:grid;grid-template-columns:auto 1fr auto;align-items:center;height:64px;}
-    .nav-logo img{height:40px;width:auto;}
-    .nav-links{display:flex;align-items:center;justify-content:center;gap:6px;}
-    .nav-links a{font-size:.875rem;font-weight:600;color:var(--steel);padding:6px 14px;border-radius:7px;transition:color .15s,background .15s;}
-    .nav-links a:hover{color:var(--petrol);background:var(--surf);}
-    .nav-actions{display:flex;align-items:center;gap:10px;justify-content:flex-end;}
-    .nav-sign-in{font-size:.875rem;font-weight:600;color:var(--steel);padding:7px 16px;border-radius:7px;transition:color .15s;}
-    .nav-sign-in:hover{color:var(--petrol);}
-    .nav-cta{font-size:.875rem;font-weight:700;background:var(--petrol);color:var(--white);padding:8px 18px;border-radius:8px;transition:background .2s;}
-    .nav-cta:hover{background:#0a3d4a;}
-    .nav-ham{display:none;flex-direction:column;justify-content:center;width:40px;height:40px;gap:5px;border-radius:7px;padding:8px;cursor:pointer;}
-    .nav-ham span{display:block;height:2px;background:var(--ink);border-radius:2px;transition:all .25s;}
-    .nav-mob{display:none;flex-direction:column;background:var(--white);border-bottom:1px solid var(--border);padding:12px 24px 20px;}
-    .nav-mob a{padding:11px 0;font-weight:600;font-size:.95rem;color:var(--ink);border-bottom:1px solid var(--mist);}
-    .nav-mob a:last-child{border-bottom:none;margin-top:10px;}
-    .nav-mob .btn-primary{text-align:center;justify-content:center;}
-    .nav-mob.open{display:flex;}
+      /* NAV */
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-inner {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        height: 64px;
+      }
+      .nav-logo img {
+        height: 40px;
+        width: auto;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      .nav-links a {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--steel);
+        padding: 6px 14px;
+        border-radius: 7px;
+        transition:
+          color 0.15s,
+          background 0.15s;
+      }
+      .nav-links a:hover {
+        color: var(--petrol);
+        background: var(--surf);
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+      .nav-sign-in {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--steel);
+        padding: 7px 16px;
+        border-radius: 7px;
+        transition: color 0.15s;
+      }
+      .nav-sign-in:hover {
+        color: var(--petrol);
+      }
+      .nav-cta {
+        font-size: 0.875rem;
+        font-weight: 700;
+        background: var(--petrol);
+        color: var(--white);
+        padding: 8px 18px;
+        border-radius: 8px;
+        transition: background 0.2s;
+      }
+      .nav-cta:hover {
+        background: #0a3d4a;
+      }
+      .nav-ham {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        gap: 5px;
+        border-radius: 7px;
+        padding: 8px;
+        cursor: pointer;
+      }
+      .nav-ham span {
+        display: block;
+        height: 2px;
+        background: var(--ink);
+        border-radius: 2px;
+        transition: all 0.25s;
+      }
+      .nav-mob {
+        display: none;
+        flex-direction: column;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 24px 20px;
+      }
+      .nav-mob a {
+        padding: 11px 0;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--ink);
+        border-bottom: 1px solid var(--mist);
+      }
+      .nav-mob a:last-child {
+        border-bottom: none;
+        margin-top: 10px;
+      }
+      .nav-mob .btn-primary {
+        text-align: center;
+        justify-content: center;
+      }
+      .nav-mob.open {
+        display: flex;
+      }
 
-    /* HERO */
-    .hero{padding:80px 0 64px;background:var(--white);overflow:hidden;}
-    .hero-inner{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:64px;}
-    .hero-text h1{margin-top:16px;}
-    .hero-text .lead{margin-top:20px;}
-    .hero-actions{display:flex;align-items:center;gap:12px;margin-top:32px;flex-wrap:wrap;}
-    .hero-trust{margin-top:24px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-    .hero-trust span{color:var(--border);}
-    .hero-image{border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(8,25,28,.12),0 4px 16px rgba(8,25,28,.06);outline:3px solid var(--border);outline-offset:6px;}  .hero-image img{border-radius:12px;display:block;width:100%;}
-    .ms-badge{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:10px;padding:10px 18px;margin-top:32px;font-size:.8rem;font-weight:600;color:var(--steel);}
-    .ms-badge svg{width:24px;height:24px;flex-shrink:0;}
+      /* HERO */
+      .hero {
+        padding: 80px 0 64px;
+        background: var(--white);
+        overflow: hidden;
+      }
+      .hero-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 64px;
+      }
+      .hero-text h1 {
+        margin-top: 16px;
+      }
+      .hero-text .lead {
+        margin-top: 20px;
+      }
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 32px;
+        flex-wrap: wrap;
+      }
+      .hero-trust {
+        margin-top: 24px;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--steel);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .hero-trust span {
+        color: var(--border);
+      }
+      .hero-image {
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow:
+          0 20px 60px rgba(8, 25, 28, 0.12),
+          0 4px 16px rgba(8, 25, 28, 0.06);
+        outline: 3px solid var(--border);
+        outline-offset: 6px;
+      }
+      .hero-image img {
+        border-radius: 12px;
+        display: block;
+        width: 100%;
+      }
+      .ms-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 18px;
+        margin-top: 32px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--steel);
+      }
+      .ms-badge svg {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+      }
 
-    /* TRUST BAR */
-    .trust-bar{padding:28px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surf);}
-    .trust-bar-inner{display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap;}
-    .trust-item{display:flex;align-items:center;gap:8px;font-size:.8rem;font-weight:600;color:var(--steel);font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase;}
-    .trust-item-logo img{height:20px;width:auto;opacity:.5;filter:grayscale(1);transition:opacity .2s,filter .2s;}
-    .trust-item-logo:hover img{opacity:.8;filter:grayscale(0);}
-    .trust-divider{width:1px;height:24px;background:var(--border);}
+      /* TRUST BAR */
+      .trust-bar {
+        padding: 28px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        background: var(--surf);
+      }
+      .trust-bar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        flex-wrap: wrap;
+      }
+      .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--steel);
+        font-family: var(--mono);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .trust-item-logo img {
+        height: 20px;
+        width: auto;
+        opacity: 0.5;
+        filter: grayscale(1);
+        transition:
+          opacity 0.2s,
+          filter 0.2s;
+      }
+      .trust-item-logo:hover img {
+        opacity: 0.8;
+        filter: grayscale(0);
+      }
+      .trust-divider {
+        width: 1px;
+        height: 24px;
+        background: var(--border);
+      }
 
-    /* SECTIONS */
-    .sec{padding:96px 0;}
-    .sec-light{background:var(--white);}
-    .sec-surf{background:var(--surf);}
-    .sec-petrol{background:var(--petrol);}
-    .sec-head{text-align:center;max-width:640px;margin:0 auto 56px;}
-    .sec-head h2{margin-bottom:12px;}
+      /* SECTIONS */
+      .sec {
+        padding: 96px 0;
+      }
+      .sec-light {
+        background: var(--white);
+      }
+      .sec-surf {
+        background: var(--surf);
+      }
+      .sec-petrol {
+        background: var(--petrol);
+      }
+      .sec-head {
+        text-align: center;
+        max-width: 640px;
+        margin: 0 auto 56px;
+      }
+      .sec-head h2 {
+        margin-bottom: 12px;
+      }
 
-    /* FEATURE CARDS */
-    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-    .feat-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px;transition:box-shadow .2s,transform .2s;}
-    .feat-card:hover{box-shadow:0 8px 30px rgba(8,25,28,.07);transform:translateY(-2px);}
-    .feat-icon-emoji{font-size:1.6rem;line-height:1;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:var(--surf);border-radius:10px;margin-bottom:16px;}
-    .feat-card h3{margin-bottom:8px;}
-    .feat-card p{font-size:.9rem;}
+      /* FEATURE CARDS */
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .feat-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 28px;
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s;
+      }
+      .feat-card:hover {
+        box-shadow: 0 8px 30px rgba(8, 25, 28, 0.07);
+        transform: translateY(-2px);
+      }
+      .feat-icon-emoji {
+        font-size: 1.6rem;
+        line-height: 1;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--surf);
+        border-radius: 10px;
+        margin-bottom: 16px;
+      }
+      .feat-card h3 {
+        margin-bottom: 8px;
+      }
+      .feat-card p {
+        font-size: 0.9rem;
+      }
 
-    /* HOW IT WORKS */
-    .steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;}
-    .step-card{position:relative;}
-    .step-number{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-    .step-number::before{content:'';display:block;width:24px;height:24px;background:var(--teal);border-radius:50%;flex-shrink:0;}
-    .step-card h3{margin-bottom:8px;font-size:1rem;}
-    .step-card p{font-size:.9rem;}
-    .step-connector{position:absolute;top:12px;right:-12px;width:24px;height:1px;background:var(--teal);opacity:.4;}
-    .step-card:last-child .step-connector{display:none;}
+      /* HOW IT WORKS */
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+      }
+      .step-card {
+        position: relative;
+      }
+      .step-number {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--teal);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .step-number::before {
+        content: "";
+        display: block;
+        width: 24px;
+        height: 24px;
+        background: var(--teal);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .step-card h3 {
+        margin-bottom: 8px;
+        font-size: 1rem;
+      }
+      .step-card p {
+        font-size: 0.9rem;
+      }
+      .step-connector {
+        position: absolute;
+        top: 12px;
+        right: -12px;
+        width: 24px;
+        height: 1px;
+        background: var(--teal);
+        opacity: 0.4;
+      }
+      .step-card:last-child .step-connector {
+        display: none;
+      }
 
-    /* TESTIMONIAL */
-    .testimonial-section{padding:80px 0;}
-    .testimonial-card{background:var(--ink);border-radius:20px;padding:64px 80px;position:relative;overflow:hidden;}
-    .testimonial-quote{font-size:clamp(1.25rem,3vw,1.75rem);font-weight:700;color:var(--white);line-height:1.4;letter-spacing:-.02em;max-width:740px;}
-    .testimonial-quote::before{content:'“';}
-    .testimonial-quote::after{content:'”';}
-    .testimonial-attr{margin-top:32px;display:flex;align-items:center;gap:16px;}
-    .testimonial-attr-line{flex:1;height:1px;background:rgba(255,255,255,.15);}
-    .testimonial-attr-text{font-family:var(--mono);font-size:.75rem;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;}
+      /* TESTIMONIAL */
+      .testimonial-section {
+        padding: 80px 0;
+      }
+      .testimonial-card {
+        background: var(--ink);
+        border-radius: 20px;
+        padding: 64px 80px;
+        position: relative;
+        overflow: hidden;
+      }
+      .testimonial-quote {
+        font-size: clamp(1.25rem, 3vw, 1.75rem);
+        font-weight: 700;
+        color: var(--white);
+        line-height: 1.4;
+        letter-spacing: -0.02em;
+        max-width: 740px;
+      }
+      .testimonial-quote::before {
+        content: "“";
+      }
+      .testimonial-quote::after {
+        content: "”";
+      }
+      .testimonial-attr {
+        margin-top: 32px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .testimonial-attr-line {
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .testimonial-attr-text {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
 
-    /* ADVANTAGES */
-    .adv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-    .adv-card{border:1px solid var(--border);border-radius:14px;padding:28px;transition:border-color .2s;}
-    .adv-card:hover{border-color:var(--teal);}
-    .adv-icon{width:44px;height:44px;border-radius:10px;background:var(--surf);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
-    .adv-icon img{width:24px;height:24px;object-fit:contain;}
-    .adv-card h3{margin-bottom:6px;}
-    .adv-card p{font-size:.875rem;}
+      /* ADVANTAGES */
+      .adv-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .adv-card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 28px;
+        transition: border-color 0.2s;
+      }
+      .adv-card:hover {
+        border-color: var(--teal);
+      }
+      .adv-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: var(--surf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 14px;
+      }
+      .adv-icon img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+      .adv-card h3 {
+        margin-bottom: 6px;
+      }
+      .adv-card p {
+        font-size: 0.875rem;
+      }
 
-    /* METRICS */
-    .metrics{padding:72px 0;background:var(--petrol);}
-    .metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);}
-    .metric{text-align:center;padding:0 32px;border-right:1px solid rgba(255,255,255,.12);}
-    .metric:last-child{border-right:none;}
-    .metric-num{font-family:var(--mono);font-size:3rem;font-weight:700;color:var(--white);line-height:1;letter-spacing:-.04em;}
-    .metric-label{font-size:.85rem;color:rgba(255,255,255,.6);margin-top:8px;font-weight:500;}
+      /* METRICS */
+      .metrics {
+        padding: 72px 0;
+        background: var(--petrol);
+      }
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .metric {
+        text-align: center;
+        padding: 0 32px;
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .metric:last-child {
+        border-right: none;
+      }
+      .metric-num {
+        font-family: var(--mono);
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--white);
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+      .metric-label {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 8px;
+        font-weight: 500;
+      }
 
-    /* PRESS */
-    .press-feature{max-width:760px;margin:0 auto;text-align:center;}
-    .press-feature h2{font-size:clamp(1.4rem,3vw,1.9rem);margin-bottom:32px;}
-    .press-feature-img{border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(8,25,28,.1),0 2px 8px rgba(8,25,28,.06);border:1px solid var(--border);margin-bottom:24px;}
-    .press-feature-img img{width:100%;display:block;}
-    .press-meta{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
-    .press-pub-logo img{height:28px;width:auto;}
-    .press-pub-dot{width:4px;height:4px;background:var(--border);border-radius:50%;}
-    .press-pub-caption{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel);}
+      /* PRESS */
+      .press-feature {
+        max-width: 760px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .press-feature h2 {
+        font-size: clamp(1.4rem, 3vw, 1.9rem);
+        margin-bottom: 32px;
+      }
+      .press-feature-img {
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow:
+          0 12px 40px rgba(8, 25, 28, 0.1),
+          0 2px 8px rgba(8, 25, 28, 0.06);
+        border: 1px solid var(--border);
+        margin-bottom: 24px;
+      }
+      .press-feature-img img {
+        width: 100%;
+        display: block;
+      }
+      .press-meta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .press-pub-logo img {
+        height: 28px;
+        width: auto;
+      }
+      .press-pub-dot {
+        width: 4px;
+        height: 4px;
+        background: var(--border);
+        border-radius: 50%;
+      }
+      .press-pub-caption {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--steel);
+      }
 
-    /* PRICING */
-    .pricing-card{max-width:540px;margin:0 auto;background:var(--white);border:2px solid var(--petrol);border-radius:20px;padding:48px;}
-    .pricing-badge{display:inline-block;background:var(--petrol);color:var(--white);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:6px;margin-bottom:20px;}
-    .pricing-price{display:flex;align-items:baseline;gap:4px;font-family:var(--mono);color:var(--ink);}
-    .pricing-price .amount{font-size:3.5rem;font-weight:700;letter-spacing:-.04em;}
-    .pricing-price .mo{font-size:1rem;color:var(--steel);}
-    .pricing-price .setup{font-size:.85rem;color:var(--steel);margin-left:4px;}
-    .pricing-desc{margin:12px 0 28px;font-size:.9rem;color:var(--steel);}
-    .pricing-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
-    .pricing-features li{display:flex;align-items:flex-start;gap:10px;font-size:.9rem;color:var(--steel);}
-    .pricing-features li::before{content:'✓';color:var(--teal);font-weight:700;font-size:.9rem;flex-shrink:0;}
-    .pricing-partners{margin-top:24px;display:flex;align-items:center;gap:16px;}
-    .pricing-partner-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel);}
-    .pricing-partners img{height:18px;width:auto;opacity:.55;}
+      /* PRICING */
+      .pricing-card {
+        max-width: 540px;
+        margin: 0 auto;
+        background: var(--white);
+        border: 2px solid var(--petrol);
+        border-radius: 20px;
+        padding: 48px;
+      }
+      .pricing-badge {
+        display: inline-block;
+        background: var(--petrol);
+        color: var(--white);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+      }
+      .pricing-price {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        font-family: var(--mono);
+        color: var(--ink);
+      }
+      .pricing-price .amount {
+        font-size: 3.5rem;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+      }
+      .pricing-price .mo {
+        font-size: 1rem;
+        color: var(--steel);
+      }
+      .pricing-price .setup {
+        font-size: 0.85rem;
+        color: var(--steel);
+        margin-left: 4px;
+      }
+      .pricing-desc {
+        margin: 12px 0 28px;
+        font-size: 0.9rem;
+        color: var(--steel);
+      }
+      .pricing-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 32px;
+      }
+      .pricing-features li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 0.9rem;
+        color: var(--steel);
+      }
+      .pricing-features li::before {
+        content: "✓";
+        color: var(--teal);
+        font-weight: 700;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+      .pricing-partners {
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .pricing-partner-lbl {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--steel);
+      }
+      .pricing-partners img {
+        height: 18px;
+        width: auto;
+        opacity: 0.55;
+      }
 
-    /* TEAM */
-    .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-    .team-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px;transition:box-shadow .2s,transform .2s;}
-    .team-card:hover{box-shadow:0 8px 28px rgba(8,25,28,.07);transform:translateY(-2px);}
-    .team-header{display:flex;align-items:center;gap:16px;margin-bottom:14px;}
-    .team-photo{width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;filter:grayscale(15%);transition:filter .2s;background:var(--surf);}
-    .team-card:hover .team-photo{filter:grayscale(0);}
-    .team-name{font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:3px;}
-    .team-role{font-size:.78rem;color:var(--steel);line-height:1.4;}
-    .team-bio{font-size:.875rem;color:var(--steel);line-height:1.6;margin-bottom:18px;}
-    .team-learn{font-size:.85rem;font-weight:600;color:var(--teal);text-decoration:none;}
-    .team-learn:hover{text-decoration:underline;}
+      /* TEAM */
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .team-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 28px;
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s;
+      }
+      .team-card:hover {
+        box-shadow: 0 8px 28px rgba(8, 25, 28, 0.07);
+        transform: translateY(-2px);
+      }
+      .team-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 14px;
+      }
+      .team-photo {
+        width: 72px;
+        height: 72px;
+        border-radius: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+        filter: grayscale(15%);
+        transition: filter 0.2s;
+        background: var(--surf);
+      }
+      .team-card:hover .team-photo {
+        filter: grayscale(0);
+      }
+      .team-name {
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--ink);
+        margin-bottom: 3px;
+      }
+      .team-role {
+        font-size: 0.78rem;
+        color: var(--steel);
+        line-height: 1.4;
+      }
+      .team-bio {
+        font-size: 0.875rem;
+        color: var(--steel);
+        line-height: 1.6;
+        margin-bottom: 18px;
+      }
+      .team-learn {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--teal);
+        text-decoration: none;
+      }
+      .team-learn:hover {
+        text-decoration: underline;
+      }
 
-    /* CTA */
-    .cta-section{padding:96px 0;background:var(--petrol);position:relative;overflow:hidden;}
-    .cta-inner{text-align:center;position:relative;z-index:1;}
-    .cta-inner h2{color:var(--white);margin-bottom:16px;}
-    .cta-inner p{color:rgba(255,255,255,.7);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;}
-    .cta-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
-    .cta-trust{margin-top:20px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);display:flex;justify-content:center;align-items:center;gap:12px;}
-    .cta-trust span{color:rgba(255,255,255,.2);}
+      /* CTA */
+      .cta-section {
+        padding: 96px 0;
+        background: var(--petrol);
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-inner {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+      .cta-inner h2 {
+        color: var(--white);
+        margin-bottom: 16px;
+      }
+      .cta-inner p {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 36px;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .cta-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .cta-trust {
+        margin-top: 20px;
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+      }
+      .cta-trust span {
+        color: rgba(255, 255, 255, 0.2);
+      }
 
-    /* FOOTER */
-    .footer{background:var(--ink);padding:64px 0 40px;}
-    .footer-inner{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
-    .footer-brand p{font-size:.875rem;color:rgba(255,255,255,.45);margin-top:14px;max-width:260px;line-height:1.6;}
-    .footer-logo img{height:44px;width:auto;}
-    .footer-col h4{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;font-family:var(--mono);}
-    .footer-col ul{display:flex;flex-direction:column;gap:10px;}
-    .footer-col ul li a{font-size:.875rem;color:rgba(255,255,255,.55);transition:color .15s;}
-    .footer-col ul li a:hover{color:var(--white);}
-    .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:28px;display:flex;align-items:center;justify-content:space-between;font-size:.8rem;color:rgba(255,255,255,.3);}
-    .footer-bottom a{color:rgba(255,255,255,.3);transition:color .15s;}
-    .footer-bottom a:hover{color:rgba(255,255,255,.7);}
+      /* FOOTER */
+      .footer {
+        background: var(--ink);
+        padding: 64px 0 40px;
+      }
+      .footer-inner {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        gap: 48px;
+        margin-bottom: 48px;
+      }
+      .footer-brand p {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.45);
+        margin-top: 14px;
+        max-width: 260px;
+        line-height: 1.6;
+      }
+      .footer-logo img {
+        height: 44px;
+        width: auto;
+      }
+      .footer-col h4 {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.35);
+        margin-bottom: 16px;
+        font-family: var(--mono);
+      }
+      .footer-col ul {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .footer-col ul li a {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.55);
+        transition: color 0.15s;
+      }
+      .footer-col ul li a:hover {
+        color: var(--white);
+      }
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .footer-bottom a {
+        color: rgba(255, 255, 255, 0.3);
+        transition: color 0.15s;
+      }
+      .footer-bottom a:hover {
+        color: rgba(255, 255, 255, 0.7);
+      }
 
-    /* SCROLL REVEAL */
-    .rv{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease;}
-    .rv.visible{opacity:1;transform:translateY(0);}
-    .rv-d1{transition-delay:.05s;}.rv-d2{transition-delay:.1s;}.rv-d3{transition-delay:.15s;}
-    .rv-d4{transition-delay:.2s;}.rv-d5{transition-delay:.25s;}.rv-d6{transition-delay:.3s;}
-    @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;}}
+      /* SCROLL REVEAL */
+      .rv {
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.55s ease,
+          transform 0.55s ease;
+      }
+      .rv.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .rv-d1 {
+        transition-delay: 0.05s;
+      }
+      .rv-d2 {
+        transition-delay: 0.1s;
+      }
+      .rv-d3 {
+        transition-delay: 0.15s;
+      }
+      .rv-d4 {
+        transition-delay: 0.2s;
+      }
+      .rv-d5 {
+        transition-delay: 0.25s;
+      }
+      .rv-d6 {
+        transition-delay: 0.3s;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .rv {
+          opacity: 1;
+          transform: none;
+        }
+      }
 
-    /* RESPONSIVE */
-    @media(max-width:960px){
-      .problem-grid{grid-template-columns:1fr;}
-      .steps-grid{grid-template-columns:repeat(2,1fr);}
-      .datacost{grid-template-columns:1fr;gap:32px;padding:40px;}
-      .addon-grid{grid-template-columns:repeat(2,1fr);}
-      .bundle-grid{grid-template-columns:1fr;}
-      .hero-inner{grid-template-columns:1fr;gap:40px;}
-      .feat-grid{grid-template-columns:repeat(2,1fr);}
-      .adv-grid{grid-template-columns:repeat(2,1fr);}
-      .steps-grid{grid-template-columns:1fr 1fr;gap:20px;}
-      .step-connector{display:none;}
-      .team-grid{grid-template-columns:repeat(2,1fr);}
-      .footer-inner{grid-template-columns:1fr 1fr;}
-      .testimonial-card{padding:40px;}
-      .metrics-grid{grid-template-columns:1fr;gap:24px;}
-      .metric{border-right:none;border-bottom:1px solid rgba(255,255,255,.12);padding:20px 0;}
-      .metric:last-child{border-bottom:none;}
-    }
-    @media(max-width:680px){
-      .addon-grid{grid-template-columns:1fr;}
-      .datacost{padding:32px 24px;}
-      .nav-links,.nav-sign-in{display:none;}
-      .nav-ham{display:flex;}
-      .hero{padding:48px 0 40px;}
-      .sec{padding:64px 0;}
-      .feat-grid,.adv-grid,.steps-grid{grid-template-columns:1fr;}
-      .team-grid{grid-template-columns:repeat(2,1fr);gap:16px;}
-      .footer-inner{grid-template-columns:1fr;gap:32px;}
-      .footer-bottom{flex-direction:column;gap:8px;text-align:center;}
-      .testimonial-card{padding:32px 24px;}
-      .pricing-card{padding:32px 24px;}
-      .trust-divider{display:none;}
-    }
-  
-    /* PROBLEM SECTION */
-    .problem-lead{max-width:680px;margin:0 auto 12px;text-align:center;}
-    .problem-deadline{display:inline-block;background:rgba(14,159,144,.1);color:var(--teal);font-family:var(--mono);font-size:12px;letter-spacing:.04em;font-weight:500;padding:8px 16px;border-radius:20px;border:1px solid rgba(14,159,144,.25);margin-bottom:20px;}
-    .problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;}
-    .problem-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:32px 28px;position:relative;overflow:hidden;}
-    .problem-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--petrol),var(--teal));}
-    .problem-stat{font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;}
-    .problem-card h3{font-size:1.15rem;margin-bottom:10px;line-height:1.3;}
-    .problem-card p{font-size:.9rem;line-height:1.65;}
-    .problem-card p .stack{display:block;}
+      /* RESPONSIVE */
+      @media (max-width: 960px) {
+        .problem-grid {
+          grid-template-columns: 1fr;
+        }
+        .steps-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .datacost {
+          grid-template-columns: 1fr;
+          gap: 32px;
+          padding: 40px;
+        }
+        .addon-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .bundle-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero-inner {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .feat-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .adv-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .steps-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+        .step-connector {
+          display: none;
+        }
+        .team-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .footer-inner {
+          grid-template-columns: 1fr 1fr;
+        }
+        .testimonial-card {
+          padding: 40px;
+        }
+        .metrics-grid {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        .metric {
+          border-right: none;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+          padding: 20px 0;
+        }
+        .metric:last-child {
+          border-bottom: none;
+        }
+      }
+      @media (max-width: 680px) {
+        .addon-grid {
+          grid-template-columns: 1fr;
+        }
+        .datacost {
+          padding: 32px 24px;
+        }
+        .nav-links,
+        .nav-sign-in {
+          display: none;
+        }
+        .nav-ham {
+          display: flex;
+        }
+        .hero {
+          padding: 48px 0 40px;
+        }
+        .sec {
+          padding: 64px 0;
+        }
+        .feat-grid,
+        .adv-grid,
+        .steps-grid {
+          grid-template-columns: 1fr;
+        }
+        .team-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
+        .footer-inner {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 8px;
+          text-align: center;
+        }
+        .testimonial-card {
+          padding: 32px 24px;
+        }
+        .pricing-card {
+          padding: 32px 24px;
+        }
+        .trust-divider {
+          display: none;
+        }
+      }
 
-    /* DATA COST EXPLAINER */
-    .datacost{background:var(--ink);border-radius:20px;padding:56px 64px;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;position:relative;overflow:hidden;}
-    .datacost-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--bright);margin-bottom:14px;}
-    .datacost h2{color:var(--white);font-size:clamp(1.5rem,3vw,2rem);margin-bottom:16px;}
-    .datacost p{color:rgba(255,255,255,.7);font-size:.98rem;line-height:1.7;}
-    .datacost-points{list-style:none;display:flex;flex-direction:column;gap:16px;}
-    .datacost-points li{display:flex;gap:14px;align-items:flex-start;color:rgba(255,255,255,.85);font-size:.92rem;line-height:1.6;}
-    .datacost-points li svg{flex-shrink:0;margin-top:3px;color:var(--bright);}
-    .datacost-highlight{color:var(--white);font-weight:700;}
-    .datacost-badge{background:rgba(93,230,210,.1);border:1px solid rgba(93,230,210,.25);border-radius:14px;padding:28px;text-align:center;}
-    .datacost-badge .figure{font-family:var(--mono);font-size:2.6rem;font-weight:700;color:var(--bright);line-height:1;letter-spacing:-.03em;}
-    .datacost-badge .figure-sub{font-size:.85rem;color:rgba(255,255,255,.6);margin-top:10px;}
-    .datacost-badge .figure-note{font-size:.78rem;color:rgba(255,255,255,.45);margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);line-height:1.5;}
+      /* PROBLEM SECTION */
+      .problem-lead {
+        max-width: 680px;
+        margin: 0 auto 12px;
+        text-align: center;
+      }
+      .problem-deadline {
+        display: inline-block;
+        background: rgba(14, 159, 144, 0.1);
+        color: var(--teal);
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        font-weight: 500;
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(14, 159, 144, 0.25);
+        margin-bottom: 20px;
+      }
+      .problem-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 48px;
+      }
+      .problem-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 32px 28px;
+        position: relative;
+        overflow: hidden;
+      }
+      .problem-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--petrol), var(--teal));
+      }
+      .problem-stat {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 16px;
+      }
+      .problem-card h3 {
+        font-size: 1.15rem;
+        margin-bottom: 10px;
+        line-height: 1.3;
+      }
+      .problem-card p {
+        font-size: 0.9rem;
+        line-height: 1.65;
+      }
+      .problem-card p .stack {
+        display: block;
+      }
 
-    /* ADD-ONS SECTION */
-    .addon-intro{text-align:center;max-width:600px;margin:0 auto 48px;}
-    .addon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-    .addon-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s,border-color .2s;}
-    .addon-card:hover{box-shadow:0 8px 28px rgba(8,25,28,.07);transform:translateY(-2px);border-color:var(--teal);}
-    .addon-card h3{font-size:1.05rem;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-    .addon-soon{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--surf);color:var(--steel);padding:3px 8px;border-radius:5px;border:1px solid var(--border);}
-    .addon-card p{font-size:.88rem;line-height:1.6;margin-bottom:16px;flex:1;}
-    .addon-bestfor{font-size:.8rem;color:var(--steel);border-top:1px solid var(--mist);padding-top:14px;}
-    .addon-bestfor strong{color:var(--ink);font-weight:600;display:block;margin-bottom:4px;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;}
+      /* DATA COST EXPLAINER */
+      .datacost {
+        background: var(--ink);
+        border-radius: 20px;
+        padding: 56px 64px;
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 56px;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .datacost-eyebrow {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--bright);
+        margin-bottom: 14px;
+      }
+      .datacost h2 {
+        color: var(--white);
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 16px;
+      }
+      .datacost p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.98rem;
+        line-height: 1.7;
+      }
+      .datacost-points {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .datacost-points li {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.92rem;
+        line-height: 1.6;
+      }
+      .datacost-points li svg {
+        flex-shrink: 0;
+        margin-top: 3px;
+        color: var(--bright);
+      }
+      .datacost-highlight {
+        color: var(--white);
+        font-weight: 700;
+      }
+      .datacost-badge {
+        background: rgba(93, 230, 210, 0.1);
+        border: 1px solid rgba(93, 230, 210, 0.25);
+        border-radius: 14px;
+        padding: 28px;
+        text-align: center;
+      }
+      .datacost-badge .figure {
+        font-family: var(--mono);
+        font-size: 2.6rem;
+        font-weight: 700;
+        color: var(--bright);
+        line-height: 1;
+        letter-spacing: -0.03em;
+      }
+      .datacost-badge .figure-sub {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 10px;
+      }
+      .datacost-badge .figure-note {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.45);
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        line-height: 1.5;
+      }
 
-  
-    /* FIRM BUNDLES */
-    .bundle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:8px;}
-    .bundle-card{border:1px solid var(--border);border-radius:16px;padding:32px 28px;background:var(--white);display:flex;flex-direction:column;position:relative;transition:box-shadow .2s,transform .2s;}
-    .bundle-card:hover{box-shadow:0 10px 34px rgba(8,25,28,.08);transform:translateY(-2px);}
-    .bundle-card.featured{border:2px solid var(--petrol);}
-    .bundle-flag{position:absolute;top:-11px;left:28px;background:var(--petrol);color:#fff;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:6px;}
-    .bundle-type{font-size:1.1rem;font-weight:800;color:var(--ink);margin-bottom:4px;letter-spacing:-.01em;}
-    .bundle-who{font-size:.8rem;color:var(--steel);margin-bottom:20px;font-family:var(--mono);letter-spacing:.02em;}
-    .bundle-rec{font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;}
-    .bundle-items{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:20px;flex:1;}
-    .bundle-items li{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:var(--ink);}
-    .bundle-items li svg{flex-shrink:0;margin-top:3px;color:var(--teal);}
-    .bundle-note{font-size:.82rem;color:var(--steel);line-height:1.55;border-top:1px solid var(--mist);padding-top:16px;}
+      /* ADD-ONS SECTION */
+      .addon-intro {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 48px;
+      }
+      .addon-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .addon-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s,
+          border-color 0.2s;
+      }
+      .addon-card:hover {
+        box-shadow: 0 8px 28px rgba(8, 25, 28, 0.07);
+        transform: translateY(-2px);
+        border-color: var(--teal);
+      }
+      .addon-card h3 {
+        font-size: 1.05rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .addon-soon {
+        font-family: var(--mono);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: var(--surf);
+        color: var(--steel);
+        padding: 3px 8px;
+        border-radius: 5px;
+        border: 1px solid var(--border);
+      }
+      .addon-card p {
+        font-size: 0.88rem;
+        line-height: 1.6;
+        margin-bottom: 16px;
+        flex: 1;
+      }
+      .addon-bestfor {
+        font-size: 0.8rem;
+        color: var(--steel);
+        border-top: 1px solid var(--mist);
+        padding-top: 14px;
+      }
+      .addon-bestfor strong {
+        color: var(--ink);
+        font-weight: 600;
+        display: block;
+        margin-bottom: 4px;
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
 
-  </style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav class="nav" id="nav">
-  <div class="wrap">
-    <div class="nav-inner">
-      <a href="/" class="nav-logo" aria-label="finperiti home">
-        <img src="/images/logo-finperiti-nav.svg" alt="finperiti" style="height:44px;width:auto;">
-      </a>
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="#solution">Our Solution</a>
-        <a href="/about">About Us</a>
-        <a href="#why-us">Why Us</a>
-        <a href="/pricing">Pricing</a>
-        <a href="/contact">Contact</a>
-      </nav>
-      <div class="nav-actions">
-        <a href="#" class="nav-sign-in">Sign in</a>
-        <a href="/contact" class="nav-cta">Book a Demo</a>
-      </div>
-      <button class="nav-ham" id="navHam" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</nav>
-<div class="nav-mob" id="navMob" role="navigation" aria-label="Mobile navigation">
-  <a href="#solution">Our Solution</a>
-  <a href="/about">About Us</a>
-  <a href="#why-us">Why Us</a>
-  <a href="/pricing">Pricing</a>
-  <a href="/contact" class="btn-primary">Book a Demo &#8594;</a>
-</div>
-
-<!-- HERO -->
-<section class="hero" aria-labelledby="hero-h1">
-  <div class="wrap">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <span class="eyebrow-pill rv">AML &#183; KYC &#183; CESOP &#183; Microsoft 365</span>
-        <h1 id="hero-h1" class="rv rv-d1">Onboard clients in minutes, not weeks</h1>
-        <p class="lead rv rv-d2">Automate KYC checks, collect documents, and become audit-ready &#8212; all inside Microsoft Office 365.</p>
-        <div class="hero-actions rv rv-d3">
-          <a href="/contact" class="btn-primary">Book a Demo &#8594;</a>
-          <a href="/pricing" class="btn-ghost">See Pricing</a>
+      /* FIRM BUNDLES */
+      .bundle-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 8px;
+      }
+      .bundle-card {
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px 28px;
+        background: var(--white);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s;
+      }
+      .bundle-card:hover {
+        box-shadow: 0 10px 34px rgba(8, 25, 28, 0.08);
+        transform: translateY(-2px);
+      }
+      .bundle-card.featured {
+        border: 2px solid var(--petrol);
+      }
+      .bundle-flag {
+        position: absolute;
+        top: -11px;
+        left: 28px;
+        background: var(--petrol);
+        color: #fff;
+        font-family: var(--mono);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 6px;
+      }
+      .bundle-type {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--ink);
+        margin-bottom: 4px;
+        letter-spacing: -0.01em;
+      }
+      .bundle-who {
+        font-size: 0.8rem;
+        color: var(--steel);
+        margin-bottom: 20px;
+        font-family: var(--mono);
+        letter-spacing: 0.02em;
+      }
+      .bundle-rec {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 12px;
+      }
+      .bundle-items {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex: 1;
+      }
+      .bundle-items li {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        font-size: 0.9rem;
+        color: var(--ink);
+      }
+      .bundle-items li svg {
+        flex-shrink: 0;
+        margin-top: 3px;
+        color: var(--teal);
+      }
+      .bundle-note {
+        font-size: 0.82rem;
+        color: var(--steel);
+        line-height: 1.55;
+        border-top: 1px solid var(--mist);
+        padding-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+      <div class="wrap">
+        <div class="nav-inner">
+          <a href="/" class="nav-logo" aria-label="finperiti home">
+            <img
+              src="/images/logo-finperiti-nav.svg"
+              alt="finperiti"
+              style="height: 44px; width: auto"
+            />
+          </a>
+          <nav class="nav-links" aria-label="Main navigation">
+            <a href="#solution">Our Solution</a>
+            <a href="/about">About Us</a>
+            <a href="#why-us">Why Us</a>
+            <a href="/pricing">Pricing</a>
+            <a href="/contact">Contact</a>
+          </nav>
+          <div class="nav-actions">
+            <a href="#" class="nav-sign-in">Sign in</a>
+            <a href="/contact" class="nav-cta">Book a Demo</a>
+          </div>
+          <button class="nav-ham" id="navHam" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
         </div>
-        <p class="hero-trust rv rv-d4">
-          <span>Microsoft ISV Certified</span><span>&#183;</span>
-          <span>Veriff-powered identity checks</span><span>&#183;</span>
-          <span>Pilots live &#183; UK &amp; Malta</span>
+      </div>
+    </nav>
+    <div class="nav-mob" id="navMob" role="navigation" aria-label="Mobile navigation">
+      <a href="#solution">Our Solution</a>
+      <a href="/about">About Us</a>
+      <a href="#why-us">Why Us</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/contact" class="btn-primary">Book a Demo &#8594;</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-h1">
+      <div class="wrap">
+        <div class="hero-inner">
+          <div class="hero-text">
+            <span class="eyebrow-pill rv">AML &#183; KYC &#183; CESOP &#183; Microsoft 365</span>
+            <h1 id="hero-h1" class="rv rv-d1">Onboard clients in minutes, not weeks</h1>
+            <p class="lead rv rv-d2">
+              Automate KYC checks, collect documents, and become audit-ready &#8212; all inside
+              Microsoft Office 365.
+            </p>
+            <div class="hero-actions rv rv-d3">
+              <a href="/contact" class="btn-primary">Book a Demo &#8594;</a>
+              <a href="/pricing" class="btn-ghost">See Pricing</a>
+            </div>
+            <p class="hero-trust rv rv-d4">
+              <span>Microsoft ISV Certified</span><span>&#183;</span>
+              <span>Veriff-powered identity checks</span><span>&#183;</span>
+              <span>Pilots live &#183; UK &amp; Malta</span>
+            </p>
+            <div class="ms-badge rv rv-d5">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M2 2h9v9H2z" fill="#F25022" />
+                <path d="M13 2h9v9h-9z" fill="#7FBA00" />
+                <path d="M2 13h9v9H2z" fill="#00A4EF" />
+                <path d="M13 13h9v9h-9z" fill="#FFB900" />
+              </svg>
+              Built natively for Microsoft 365
+            </div>
+          </div>
+          <div class="hero-image rv rv-d2">
+            <img
+              src="/images/hero-illustration.svg"
+              alt="finperiti compliance dashboard"
+              loading="eager"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <div class="trust-bar">
+      <div class="wrap">
+        <div class="trust-bar-inner">
+          <div class="trust-item">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg
+            >Enterprise Ireland Backed
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-item">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg
+            >Microsoft ISV Certified
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-item trust-item-logo">
+            <span>KYC by</span
+            ><img src="/images/logo-veriff.svg" alt="Veriff" style="height: 16px; width: auto" />
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-item trust-item-logo">
+            <span>Document Integrity by</span
+            ><img
+              src="/images/logo-binarii-labs.png"
+              alt="Binarii"
+              style="height: 16px; width: auto"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROBLEM -->
+    <section class="sec sec-light" id="the-problem" aria-labelledby="problem-heading">
+      <div class="wrap">
+        <div class="sec-head rv" style="margin-bottom: 0">
+          <div class="problem-deadline">&#9888;&nbsp; New AML rules land July 2026</div>
+          <h2 id="problem-heading">Compliance designed for SMEs</h2>
+          <p class="problem-lead">
+            From July 2026, firms like yours &#8212; accountants, legal advisers, and wealth
+            managers &#8212; must follow new, enforceable client-onboarding rules designed to
+            tighten AML and KYC controls.
+          </p>
+        </div>
+        <div class="problem-grid">
+          <div class="problem-card rv rv-d1">
+            <div class="problem-stat">Zero Audit Trail</div>
+            <h3>Microsoft Office doesn't mean compliance</h3>
+            <p>
+              That&#8217;s what email + Excel gives you. Finperiti creates structured, time-stamped
+              onboarding records you can defend.
+            </p>
+          </div>
+          <div class="problem-card rv rv-d2">
+            <div class="problem-stat">100% Visibility</div>
+            <h3>The rules are changing</h3>
+            <p>
+              <span class="stack">Every client.</span><span class="stack">Every document.</span
+              ><span class="stack">Every decision.</span>No more chasing files across shared
+              folders.
+            </p>
+          </div>
+          <div class="problem-card rv rv-d3">
+            <div class="problem-stat">&#8364;10M Risk</div>
+            <h3>Cost of non compliance</h3>
+            <p>For a process that costs less than &#8364;199/month to fix.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="sec sec-light" id="solution" aria-labelledby="feat-heading">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <span class="eyebrow">Built on the tools you already use every day</span>
+          <h2 id="feat-heading">The first AML engine built for SMEs&#8212;inside Microsoft</h2>
+          <p class="sec-sub">
+            finperiti is the first AML onboarding platform designed specifically for SMEs and fully
+            embedded inside Microsoft. No portals, no plugins, no extra training&#8212;just
+            seamless, audit-ready compliance where you already work.
+          </p>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card rv rv-d1">
+            <div class="feat-icon-emoji">&#128640;</div>
+            <h3>Deploy in Minutes via Microsoft AppSource</h3>
+            <p>
+              Set up instantly without complex IT projects and start onboarding clients securely the
+              same day.
+            </p>
+          </div>
+          <div class="feat-card rv rv-d2">
+            <div class="feat-icon-emoji">&#128196;</div>
+            <h3>Smart Document Capture &amp; Automated KYC Extraction</h3>
+            <p>
+              Upload, tag, and extract key identity data automatically&#8212;eliminating manual
+              entry and reducing errors.
+            </p>
+          </div>
+          <div class="feat-card rv rv-d3">
+            <div class="feat-icon-emoji">&#129535;</div>
+            <h3>Real-Time Identity Verification &amp; Liveness Checks</h3>
+            <p>
+              Instantly confirm client identities with AI-powered checks, cross-document
+              consistency, and anti-spoofing safeguards.
+            </p>
+          </div>
+          <div class="feat-card rv rv-d1">
+            <div class="feat-icon-emoji">&#129302;</div>
+            <h3>Agentic AI &#8212; Your Digital Teammate for Compliance</h3>
+            <p>
+              Assess risk against AMLA, FATF, FIU, and FinCEN standards automatically, with
+              transparent scoring logic.
+            </p>
+          </div>
+          <div class="feat-card rv rv-d2">
+            <div class="feat-icon-emoji">&#128274;</div>
+            <h3>Immutable, Tamper-Proof Audit Trails</h3>
+            <p>
+              Cryptographically log every step to ensure absolute compliance proof for regulators
+              and auditors.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="sec sec-surf" id="how-it-works" aria-labelledby="steps-heading">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <span class="eyebrow">How finperiti Works</span>
+          <h2 id="steps-heading">
+            Experience seamless compliance automation&#8212;natively inside your Microsoft
+            environment
+          </h2>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card rv rv-d1">
+            <div class="step-number">Step 01</div>
+            <div class="step-connector"></div>
+            <h3>Install in Minutes</h3>
+            <p>
+              Deploys effortlessly via Microsoft AppSource. No portals, plugins, or new tools to
+              learn&#8212;installation is instant.
+            </p>
+          </div>
+          <div class="step-card rv rv-d2">
+            <div class="step-number">Step 02</div>
+            <div class="step-connector"></div>
+            <h3>Initiate Onboarding Inside Your Daily Tools</h3>
+            <p>
+              Start new client onboarding directly within familiar Microsoft applications. No change
+              to your workflow or need for extra software.
+            </p>
+          </div>
+          <div class="step-card rv rv-d3">
+            <div class="step-number">Step 03</div>
+            <div class="step-connector"></div>
+            <h3>Automate Compliance Tasks</h3>
+            <p>
+              finperiti wraps AI-powered compliance workflows around your existing systems,
+              automating up to 80% of manual onboarding tasks &#8212; smart document capture, KYC
+              extraction, and real-time identity verification.
+            </p>
+          </div>
+          <div class="step-card rv rv-d4">
+            <div class="step-number">Step 04</div>
+            <div class="step-connector"></div>
+            <h3>Comply with Confidence</h3>
+            <p>
+              Agentic AI risk scoring aligned to AMLA, FATF, FIU, and FinCEN standards. Every step
+              is cryptographically logged, giving you immutable audit trails and real-time scoring.
+            </p>
+          </div>
+          <div class="step-card rv rv-d5">
+            <div class="step-number">Step 05</div>
+            <h3>Own Your Secure Compliance Layer</h3>
+            <p>
+              All processes and data remain securely within your Microsoft environment. Configurable
+              workflows, customisable without developer input, ensure your firm keeps control and
+              sovereignty over compliance.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL 1 -->
+    <div class="testimonial-section">
+      <div class="wrap">
+        <div class="testimonial-card rv">
+          <p class="testimonial-quote">
+            We retired a &#8364;6K competitor because we still had to classify risk by hand.
+            Finperiti solved that instantly.
+          </p>
+          <div class="testimonial-attr">
+            <div class="testimonial-attr-line"></div>
+            <div class="testimonial-attr-text">SME Pilot Customer &#183; UK</div>
+            <div class="testimonial-attr-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADVANTAGES -->
+    <section class="sec sec-light" id="why-us" aria-labelledby="adv-heading">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <span class="eyebrow">Why SMEs Trust finperiti</span>
+          <h2 id="adv-heading">Distinctive advantages that differentiate finperiti</h2>
+          <p class="sec-sub">
+            finperiti is the first AML onboarding platform designed specifically for SMEs and fully
+            embedded inside Microsoft. No portals, no plugins, no extra training&#8212;just
+            seamless, audit-ready compliance where you already work.
+          </p>
+        </div>
+        <div class="adv-grid">
+          <div class="adv-card rv rv-d1">
+            <div class="adv-icon"><img src="/images/icon-microsoft-native.svg" alt="" /></div>
+            <h3>Microsoft Native</h3>
+            <p>
+              Fully embedded inside Microsoft with no new portals or IT setup required, keeping your
+              existing workflows intact.
+            </p>
+          </div>
+          <div class="adv-card rv rv-d2">
+            <div class="adv-icon"><img src="/images/icon-agentic-ai.svg" alt="" /></div>
+            <h3>Agentic AI for Compliance</h3>
+            <p>
+              AI models trained specifically for SME onboarding to assist compliance professionals
+              with real-time risk scoring and verification.
+            </p>
+          </div>
+          <div class="adv-card rv rv-d3">
+            <div class="adv-icon"><img src="/images/icon-workflow-control.svg" alt="" /></div>
+            <h3>Complete Workflow Control</h3>
+            <p>
+              Manages the entire onboarding process from client intake to audit readiness providing
+              full ownership over compliance.
+            </p>
+          </div>
+          <div class="adv-card rv rv-d1">
+            <div class="adv-icon"><img src="/images/icon-affordable.svg" alt="" /></div>
+            <h3>Affordable</h3>
+            <p>
+              Modular pricing designed for SMEs, costing 70&#8211;90% less than enterprise
+              compliance platforms.
+            </p>
+          </div>
+          <div class="adv-card rv rv-d2">
+            <div class="adv-icon"><img src="/images/icon-data-security.svg" alt="" /></div>
+            <h3>Sovereign Data Security</h3>
+            <p>
+              Zero-trust, encrypted, tamper-proof storage meeting strict regulatory standards for
+              data protection.
+            </p>
+          </div>
+          <div class="adv-card rv rv-d3">
+            <div class="adv-icon"><img src="/images/icon-instant-roi.svg" alt="" /></div>
+            <h3>Instant ROI</h3>
+            <p>
+              Automates up to 80% of manual tasks, reducing risk and simplifying audits for
+              immediate efficiency gains.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRESS -->
+    <section class="sec sec-surf" aria-labelledby="press-heading">
+      <div class="wrap">
+        <div class="press-feature rv">
+          <span class="eyebrow" style="justify-content: center; display: flex; margin-bottom: 16px"
+            >In the News</span
+          >
+          <h2 id="press-heading">
+            finperiti featured among Enterprise Ireland&#8217;s backed start-ups
+          </h2>
+          <div class="press-feature-img">
+            <img
+              src="/images/press-feature-enterprise-ireland.jpg"
+              alt="finperiti featured in Northside People West alongside Enterprise Ireland backed start-ups"
+              loading="lazy"
+            />
+          </div>
+          <div class="press-meta">
+            <div class="press-pub-logo">
+              <img src="/images/press-logo-northside-people.png" alt="Northside People West" />
+            </div>
+            <div class="press-pub-dot"></div>
+            <span class="press-pub-caption"
+              >Published in Northside People West, September 2025</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL 2 -->
+    <div class="testimonial-section">
+      <div class="wrap">
+        <div class="testimonial-card rv" style="background: var(--petrol)">
+          <p class="testimonial-quote">
+            Finperiti is the first platform that addresses our real world workflows.
+          </p>
+          <div class="testimonial-attr">
+            <div class="testimonial-attr-line"></div>
+            <div class="testimonial-attr-text">SME Pilot Customer &#183; Malta</div>
+            <div class="testimonial-attr-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <section class="sec sec-light" id="pricing" aria-labelledby="pricing-heading">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <span class="eyebrow">Signup Plan &amp; Pricing</span>
+          <h2 id="pricing-heading">Simple, transparent pricing designed for SMEs</h2>
+          <p class="sec-sub">One plan, all features. No per-seat fees, no lock-in.</p>
+        </div>
+        <div class="pricing-card rv">
+          <div class="pricing-badge">finperiti Core Platform</div>
+          <div class="pricing-price">
+            <span class="amount">&#8364;199</span><span class="mo">/month</span
+            ><span class="setup">+ &#8364;299 setup</span>
+          </div>
+          <p class="pricing-desc">
+            &#8364;299 one-time setup fee. The all-in-one package to automate and streamline your
+            AML onboarding inside Microsoft Office 365.
+          </p>
+          <ul class="pricing-features">
+            <li>AML client onboarding</li>
+            <li>KYC verification workflows</li>
+            <li>Automated risk ratings</li>
+            <li>Audit trails &amp; reporting</li>
+            <li>CESOP reporting</li>
+            <li>Microsoft 365 integration</li>
+          </ul>
+          <a href="/contact" class="btn-primary" style="width: 100%; justify-content: center"
+            >Get Started Today &#8594;</a
+          >
+          <a
+            href="/pricing"
+            class="btn-ghost"
+            style="width: 100%; justify-content: center; margin-top: 10px"
+            >See full pricing &amp; add-ons &#8594;</a
+          >
+          <div class="pricing-partners">
+            <span class="pricing-partner-lbl">Powered by</span>
+            <img src="/images/logo-veriff.svg" alt="Veriff" style="height: 18px; opacity: 0.7" />
+            <img
+              src="/images/logo-binarii-labs.png"
+              alt="Binarii"
+              style="height: 18px; opacity: 0.6"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="sec sec-surf" id="about" aria-labelledby="team-heading">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <span class="eyebrow">Our Team</span>
+          <h2 id="team-heading">The people behind our success</h2>
+        </div>
+        <div class="team-grid">
+          <div class="team-card rv rv-d1">
+            <div class="team-header">
+              <img
+                class="team-photo"
+                src="/images/team-fiona.jpg"
+                alt="Fiona Finucane"
+                loading="lazy"
+              />
+              <div>
+                <div class="team-name">Fiona Finucane</div>
+                <div class="team-role">Founder &amp; CEO</div>
+              </div>
+            </div>
+            <p class="team-bio">
+              Visionary leader with 20+ years in fund services and compliance tech, leading product
+              and regulatory strategy.
+            </p>
+            <a href="/about#fiona" class="team-learn">Learn more &#8594;</a>
+          </div>
+          <div class="team-card rv rv-d2">
+            <div class="team-header">
+              <img
+                class="team-photo"
+                src="/images/team-richard.jpg"
+                alt="Richard Metcalfe"
+                loading="lazy"
+              />
+              <div>
+                <div class="team-name">Richard Metcalfe</div>
+                <div class="team-role">Chief Growth Officer</div>
+              </div>
+            </div>
+            <p class="team-bio">
+              Growth expert with 20+ years scaling B2B SaaS ventures and driving commercial success.
+            </p>
+            <a href="/about#richard" class="team-learn">Learn more &#8594;</a>
+          </div>
+          <div class="team-card rv rv-d3">
+            <div class="team-header">
+              <img
+                class="team-photo"
+                src="/images/team-gordon.jpg"
+                alt="Gordon Rudman"
+                loading="lazy"
+              />
+              <div>
+                <div class="team-name">Gordon Rudman</div>
+                <div class="team-role">CTO</div>
+              </div>
+            </div>
+            <p class="team-bio">
+              Technology leader with 25+ years in software engineering, enterprise architecture, and
+              building secure, scalable platforms.
+            </p>
+            <a href="/about#gordon" class="team-learn">Learn more &#8594;</a>
+          </div>
+          <div class="team-card rv rv-d4">
+            <div class="team-header">
+              <img
+                class="team-photo"
+                src="/images/team-bipin.jpg"
+                alt="Bipin Jain"
+                loading="lazy"
+              />
+              <div>
+                <div class="team-name">Bipin Jain</div>
+                <div class="team-role">Head of Product</div>
+              </div>
+            </div>
+            <p class="team-bio">
+              Tech architect with 15+ years in software engineering and enterprise platforms,
+              ensuring scalability and security.
+            </p>
+            <a href="/about#bipin" class="team-learn">Learn more &#8594;</a>
+          </div>
+          <div class="team-card rv rv-d5">
+            <div class="team-header">
+              <img
+                class="team-photo"
+                src="/images/team-rachel.jpg"
+                alt="Rachel Martin"
+                loading="lazy"
+              />
+              <div>
+                <div class="team-name">Rachel Martin</div>
+                <div class="team-role">Regulatory</div>
+              </div>
+            </div>
+            <p class="team-bio">
+              AML and compliance specialist guiding regulatory strategy and risk frameworks.
+            </p>
+            <a href="/about#rachel" class="team-learn">Learn more &#8594;</a>
+          </div>
+          <div class="team-card rv rv-d6">
+            <div class="team-header">
+              <img
+                class="team-photo"
+                src="/images/team-james.jpg"
+                alt="James Robinson"
+                loading="lazy"
+              />
+              <div>
+                <div class="team-name">James Robinson</div>
+                <div class="team-role">CFO Advisor</div>
+              </div>
+            </div>
+            <p class="team-bio">
+              Finance leader with 20+ years experience advising on forecasting, strategy, and
+              growth.
+            </p>
+            <a href="/about#james" class="team-learn">Learn more &#8594;</a>
+          </div>
+          <div class="team-card rv rv-d1">
+            <div class="team-header">
+              <img class="team-photo" src="/images/team-paul.jpg" alt="Paul Mason" loading="lazy" />
+              <div>
+                <div class="team-name">Paul Mason</div>
+                <div class="team-role">Strategic Advisor</div>
+              </div>
+            </div>
+            <p class="team-bio">
+              Industry veteran with 25+ years of global leadership, driving AI strategy and
+              partnerships.
+            </p>
+            <a href="/about#paul" class="team-learn">Learn more &#8594;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" id="waitlist" aria-labelledby="cta-heading">
+      <div class="cta-inner">
+        <span
+          class="eyebrow"
+          style="color: rgba(93, 230, 210, 0.7); display: block; margin-bottom: 16px"
+          >Get started</span
+        >
+        <h2 id="cta-heading">Ready to see it in your environment?</h2>
+        <p>
+          Book a 30-minute demo and we&#8217;ll walk through onboarding a client &#8212; live,
+          inside your Microsoft 365 tenant.
         </p>
-        <div class="ms-badge rv rv-d5">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M2 2h9v9H2z" fill="#F25022"/><path d="M13 2h9v9h-9z" fill="#7FBA00"/>
-            <path d="M2 13h9v9H2z" fill="#00A4EF"/><path d="M13 13h9v9h-9z" fill="#FFB900"/>
-          </svg>
-          Built natively for Microsoft 365
+        <div class="cta-actions">
+          <a href="/contact" class="btn-white">Book a Demo &#8594;</a>
+          <a href="/contact" class="btn-outline-white">Talk to the team</a>
         </div>
+        <p class="cta-trust">
+          No credit card required <span>&#183;</span> Live in your tenant same day
+          <span>&#183;</span> Cancel anytime
+        </p>
       </div>
-      <div class="hero-image rv rv-d2">
-        <img src="/images/hero-illustration.svg" alt="finperiti compliance dashboard" loading="eager">
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- TRUST BAR -->
-<div class="trust-bar">
-  <div class="wrap">
-    <div class="trust-bar-inner">
-      <div class="trust-item"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Enterprise Ireland Backed</div>
-      <div class="trust-divider"></div>
-      <div class="trust-item"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Microsoft ISV Certified</div>
-      <div class="trust-divider"></div>
-      <div class="trust-item trust-item-logo"><span>KYC by</span><img src="/images/logo-veriff.svg" alt="Veriff" style="height:16px;width:auto;"></div>
-      <div class="trust-divider"></div>
-      <div class="trust-item trust-item-logo"><span>Document Integrity by</span><img src="/images/logo-binarii-labs.png" alt="Binarii" style="height:16px;width:auto;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- PROBLEM -->
-<section class="sec sec-light" id="the-problem" aria-labelledby="problem-heading">
-  <div class="wrap">
-    <div class="sec-head rv" style="margin-bottom:0;">
-      <div class="problem-deadline">&#9888;&nbsp; New AML rules land July 2026</div>
-      <h2 id="problem-heading">Compliance designed for SMEs</h2>
-      <p class="problem-lead">From July 2026, firms like yours &#8212; accountants, legal advisers, and wealth managers &#8212; must follow new, enforceable client-onboarding rules designed to tighten AML and KYC controls.</p>
-    </div>
-    <div class="problem-grid">
-      <div class="problem-card rv rv-d1">
-        <div class="problem-stat">Zero Audit Trail</div>
-        <h3>Microsoft Office doesn't mean compliance</h3>
-        <p>That&#8217;s what email + Excel gives you. Finperiti creates structured, time-stamped onboarding records you can defend.</p>
-      </div>
-      <div class="problem-card rv rv-d2">
-        <div class="problem-stat">100% Visibility</div>
-        <h3>The rules are changing</h3>
-        <p><span class="stack">Every client.</span><span class="stack">Every document.</span><span class="stack">Every decision.</span>No more chasing files across shared folders.</p>
-      </div>
-      <div class="problem-card rv rv-d3">
-        <div class="problem-stat">&#8364;10M Risk</div>
-        <h3>Cost of non compliance</h3>
-        <p>For a process that costs less than &#8364;199/month to fix.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="sec sec-light" id="solution" aria-labelledby="feat-heading">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Built on the tools you already use every day</span>
-      <h2 id="feat-heading">The first AML engine built for SMEs&#8212;inside Microsoft</h2>
-      <p class="sec-sub">finperiti is the first AML onboarding platform designed specifically for SMEs and fully embedded inside Microsoft. No portals, no plugins, no extra training&#8212;just seamless, audit-ready compliance where you already work.</p>
-    </div>
-    <div class="feat-grid">
-      <div class="feat-card rv rv-d1"><div class="feat-icon-emoji">&#128640;</div><h3>Deploy in Minutes via Microsoft AppSource</h3><p>Set up instantly without complex IT projects and start onboarding clients securely the same day.</p></div>
-      <div class="feat-card rv rv-d2"><div class="feat-icon-emoji">&#128196;</div><h3>Smart Document Capture &amp; Automated KYC Extraction</h3><p>Upload, tag, and extract key identity data automatically&#8212;eliminating manual entry and reducing errors.</p></div>
-      <div class="feat-card rv rv-d3"><div class="feat-icon-emoji">&#129535;</div><h3>Real-Time Identity Verification &amp; Liveness Checks</h3><p>Instantly confirm client identities with AI-powered checks, cross-document consistency, and anti-spoofing safeguards.</p></div>
-      <div class="feat-card rv rv-d1"><div class="feat-icon-emoji">&#129302;</div><h3>Agentic AI &#8212; Your Digital Teammate for Compliance</h3><p>Assess risk against AMLA, FATF, FIU, and FinCEN standards automatically, with transparent scoring logic.</p></div>
-      <div class="feat-card rv rv-d2"><div class="feat-icon-emoji">&#128274;</div><h3>Immutable, Tamper-Proof Audit Trails</h3><p>Cryptographically log every step to ensure absolute compliance proof for regulators and auditors.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="sec sec-surf" id="how-it-works" aria-labelledby="steps-heading">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">How finperiti Works</span>
-      <h2 id="steps-heading">Experience seamless compliance automation&#8212;natively inside your Microsoft environment</h2>
-    </div>
-    <div class="steps-grid">
-      <div class="step-card rv rv-d1"><div class="step-number">Step 01</div><div class="step-connector"></div><h3>Install in Minutes</h3><p>Deploys effortlessly via Microsoft AppSource. No portals, plugins, or new tools to learn&#8212;installation is instant.</p></div>
-      <div class="step-card rv rv-d2"><div class="step-number">Step 02</div><div class="step-connector"></div><h3>Initiate Onboarding Inside Your Daily Tools</h3><p>Start new client onboarding directly within familiar Microsoft applications. No change to your workflow or need for extra software.</p></div>
-      <div class="step-card rv rv-d3"><div class="step-number">Step 03</div><div class="step-connector"></div><h3>Automate Compliance Tasks</h3><p>finperiti wraps AI-powered compliance workflows around your existing systems, automating up to 80% of manual onboarding tasks &#8212; smart document capture, KYC extraction, and real-time identity verification.</p></div>
-      <div class="step-card rv rv-d4"><div class="step-number">Step 04</div><div class="step-connector"></div><h3>Comply with Confidence</h3><p>Agentic AI risk scoring aligned to AMLA, FATF, FIU, and FinCEN standards. Every step is cryptographically logged, giving you immutable audit trails and real-time scoring.</p></div>
-      <div class="step-card rv rv-d5"><div class="step-number">Step 05</div><h3>Own Your Secure Compliance Layer</h3><p>All processes and data remain securely within your Microsoft environment. Configurable workflows, customisable without developer input, ensure your firm keeps control and sovereignty over compliance.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIAL 1 -->
-<div class="testimonial-section">
-  <div class="wrap">
-    <div class="testimonial-card rv">
-      <p class="testimonial-quote">We retired a &#8364;6K competitor because we still had to classify risk by hand. Finperiti solved that instantly.</p>
-      <div class="testimonial-attr"><div class="testimonial-attr-line"></div><div class="testimonial-attr-text">SME Pilot Customer &#183; UK</div><div class="testimonial-attr-line"></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ADVANTAGES -->
-<section class="sec sec-light" id="why-us" aria-labelledby="adv-heading">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Why SMEs Trust finperiti</span>
-      <h2 id="adv-heading">Distinctive advantages that differentiate finperiti</h2>
-      <p class="sec-sub">finperiti is the first AML onboarding platform designed specifically for SMEs and fully embedded inside Microsoft. No portals, no plugins, no extra training&#8212;just seamless, audit-ready compliance where you already work.</p>
-    </div>
-    <div class="adv-grid">
-      <div class="adv-card rv rv-d1"><div class="adv-icon"><img src="/images/icon-microsoft-native.svg" alt=""></div><h3>Microsoft Native</h3><p>Fully embedded inside Microsoft with no new portals or IT setup required, keeping your existing workflows intact.</p></div>
-      <div class="adv-card rv rv-d2"><div class="adv-icon"><img src="/images/icon-agentic-ai.svg" alt=""></div><h3>Agentic AI for Compliance</h3><p>AI models trained specifically for SME onboarding to assist compliance professionals with real-time risk scoring and verification.</p></div>
-      <div class="adv-card rv rv-d3"><div class="adv-icon"><img src="/images/icon-workflow-control.svg" alt=""></div><h3>Complete Workflow Control</h3><p>Manages the entire onboarding process from client intake to audit readiness providing full ownership over compliance.</p></div>
-      <div class="adv-card rv rv-d1"><div class="adv-icon"><img src="/images/icon-affordable.svg" alt=""></div><h3>Affordable</h3><p>Modular pricing designed for SMEs, costing 70&#8211;90% less than enterprise compliance platforms.</p></div>
-      <div class="adv-card rv rv-d2"><div class="adv-icon"><img src="/images/icon-data-security.svg" alt=""></div><h3>Sovereign Data Security</h3><p>Zero-trust, encrypted, tamper-proof storage meeting strict regulatory standards for data protection.</p></div>
-      <div class="adv-card rv rv-d3"><div class="adv-icon"><img src="/images/icon-instant-roi.svg" alt=""></div><h3>Instant ROI</h3><p>Automates up to 80% of manual tasks, reducing risk and simplifying audits for immediate efficiency gains.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- PRESS -->
-<section class="sec sec-surf" aria-labelledby="press-heading">
-  <div class="wrap">
-    <div class="press-feature rv">
-      <span class="eyebrow" style="justify-content:center;display:flex;margin-bottom:16px;">In the News</span>
-      <h2 id="press-heading">finperiti featured among Enterprise Ireland&#8217;s backed start-ups</h2>
-      <div class="press-feature-img">
-        <img src="/images/press-feature-enterprise-ireland.jpg" alt="finperiti featured in Northside People West alongside Enterprise Ireland backed start-ups" loading="lazy">
-      </div>
-      <div class="press-meta">
-        <div class="press-pub-logo"><img src="/images/press-logo-northside-people.png" alt="Northside People West"></div>
-        <div class="press-pub-dot"></div>
-        <span class="press-pub-caption">Published in Northside People West, September 2025</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIAL 2 -->
-<div class="testimonial-section">
-  <div class="wrap">
-    <div class="testimonial-card rv" style="background:var(--petrol);">
-      <p class="testimonial-quote">Finperiti is the first platform that addresses our real world workflows.</p>
-      <div class="testimonial-attr"><div class="testimonial-attr-line"></div><div class="testimonial-attr-text">SME Pilot Customer &#183; Malta</div><div class="testimonial-attr-line"></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- PRICING -->
-<section class="sec sec-light" id="pricing" aria-labelledby="pricing-heading">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Signup Plan &amp; Pricing</span>
-      <h2 id="pricing-heading">Simple, transparent pricing designed for SMEs</h2>
-      <p class="sec-sub">One plan, all features. No per-seat fees, no lock-in.</p>
-    </div>
-    <div class="pricing-card rv">
-      <div class="pricing-badge">finperiti Core Platform</div>
-      <div class="pricing-price"><span class="amount">&#8364;199</span><span class="mo">/month</span><span class="setup">+ &#8364;299 setup</span></div>
-      <p class="pricing-desc">&#8364;299 one-time setup fee. The all-in-one package to automate and streamline your AML onboarding inside Microsoft Office 365.</p>
-      <ul class="pricing-features">
-        <li>AML client onboarding</li>
-        <li>KYC verification workflows</li>
-        <li>Automated risk ratings</li>
-        <li>Audit trails &amp; reporting</li>
-        <li>CESOP reporting</li>
-        <li>Microsoft 365 integration</li>
-      </ul>
-      <a href="/contact" class="btn-primary" style="width:100%;justify-content:center;">Get Started Today &#8594;</a>
-      <a href="/pricing" class="btn-ghost" style="width:100%;justify-content:center;margin-top:10px;">See full pricing &amp; add-ons &#8594;</a>
-      <div class="pricing-partners">
-        <span class="pricing-partner-lbl">Powered by</span>
-        <img src="/images/logo-veriff.svg" alt="Veriff" style="height:18px;opacity:.7;">
-        <img src="/images/logo-binarii-labs.png" alt="Binarii" style="height:18px;opacity:.6;">
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TEAM -->
-<section class="sec sec-surf" id="about" aria-labelledby="team-heading">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Our Team</span>
-      <h2 id="team-heading">The people behind our success</h2>
-    </div>
-    <div class="team-grid">
-      <div class="team-card rv rv-d1">
-        <div class="team-header">
-          <img class="team-photo" src="/images/team-fiona.jpg" alt="Fiona Finucane" loading="lazy">
-          <div>
-            <div class="team-name">Fiona Finucane</div>
-            <div class="team-role">Founder &amp; CEO</div>
+    <!-- FOOTER -->
+    <footer class="footer" aria-label="Site footer">
+      <div class="wrap">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <img src="/images/logo-finperiti-footer.svg" alt="finperiti" />
+            </div>
+            <p>
+              AML and KYC compliance for professional services &#8212; built natively inside
+              Microsoft 365.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Product</h4>
+            <ul>
+              <li><a href="#solution">Solution</a></li>
+              <li><a href="#how-it-works">How It Works</a></li>
+              <li><a href="/pricing">Pricing</a></li>
+              <li>
+                <a
+                  href="https://kind-river-07dda5b03.6.azurestaticapps.net/signup"
+                  target="_blank"
+                  rel="noopener"
+                  >Sign in</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="/about">About &amp; Team</a></li>
+              <li><a href="mailto:team@finperiti.com">Contact</a></li>
+              <li><a href="#">Careers</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></li>
+              <li>
+                <a href="/terms-and-conditions" target="_blank" rel="noopener"
+                  >Terms &amp; Conditions</a
+                >
+              </li>
+            </ul>
           </div>
         </div>
-        <p class="team-bio">Visionary leader with 20+ years in fund services and compliance tech, leading product and regulatory strategy.</p>
-        <a href="/about#fiona" class="team-learn">Learn more &#8594;</a>
-      </div>
-      <div class="team-card rv rv-d2">
-        <div class="team-header">
-          <img class="team-photo" src="/images/team-richard.jpg" alt="Richard Metcalfe" loading="lazy">
-          <div>
-            <div class="team-name">Richard Metcalfe</div>
-            <div class="team-role">Chief Growth Officer</div>
-          </div>
+        <div class="footer-bottom">
+          <span
+            >&#169; 2026 finperiti Limited. All rights reserved. finperiti&#174; is a registered
+            trademark of finperiti Ltd., registered in the European Union.</span
+          >
+          <span><a href="mailto:team@finperiti.com">team@finperiti.com</a></span>
         </div>
-        <p class="team-bio">Growth expert with 20+ years scaling B2B SaaS ventures and driving commercial success.</p>
-        <a href="/about#richard" class="team-learn">Learn more &#8594;</a>
       </div>
-      <div class="team-card rv rv-d3">
-        <div class="team-header">
-          <img class="team-photo" src="/images/team-gordon.jpg" alt="Gordon Rudman" loading="lazy">
-          <div>
-            <div class="team-name">Gordon Rudman</div>
-            <div class="team-role">CTO</div>
-          </div>
-        </div>
-        <p class="team-bio">Technology leader with 25+ years in software engineering, enterprise architecture, and building secure, scalable platforms.</p>
-        <a href="/about#gordon" class="team-learn">Learn more &#8594;</a>
-      </div>
-      <div class="team-card rv rv-d4">
-        <div class="team-header">
-          <img class="team-photo" src="/images/team-bipin.jpg" alt="Bipin Jain" loading="lazy">
-          <div>
-            <div class="team-name">Bipin Jain</div>
-            <div class="team-role">Head of Product</div>
-          </div>
-        </div>
-        <p class="team-bio">Tech architect with 15+ years in software engineering and enterprise platforms, ensuring scalability and security.</p>
-        <a href="/about#bipin" class="team-learn">Learn more &#8594;</a>
-      </div>
-      <div class="team-card rv rv-d5">
-        <div class="team-header">
-          <img class="team-photo" src="/images/team-rachel.jpg" alt="Rachel Martin" loading="lazy">
-          <div>
-            <div class="team-name">Rachel Martin</div>
-            <div class="team-role">Regulatory</div>
-          </div>
-        </div>
-        <p class="team-bio">AML and compliance specialist guiding regulatory strategy and risk frameworks.</p>
-        <a href="/about#rachel" class="team-learn">Learn more &#8594;</a>
-      </div>
-      <div class="team-card rv rv-d6">
-        <div class="team-header">
-          <img class="team-photo" src="/images/team-james.jpg" alt="James Robinson" loading="lazy">
-          <div>
-            <div class="team-name">James Robinson</div>
-            <div class="team-role">CFO Advisor</div>
-          </div>
-        </div>
-        <p class="team-bio">Finance leader with 20+ years experience advising on forecasting, strategy, and growth.</p>
-        <a href="/about#james" class="team-learn">Learn more &#8594;</a>
-      </div>
-      <div class="team-card rv rv-d1">
-        <div class="team-header">
-          <img class="team-photo" src="/images/team-paul.jpg" alt="Paul Mason" loading="lazy">
-          <div>
-            <div class="team-name">Paul Mason</div>
-            <div class="team-role">Strategic Advisor</div>
-          </div>
-        </div>
-        <p class="team-bio">Industry veteran with 25+ years of global leadership, driving AI strategy and partnerships.</p>
-        <a href="/about#paul" class="team-learn">Learn more &#8594;</a>
-      </div>
-    </div>
-  </div>
-</section>
+    </footer>
 
-
-
-<!-- CTA -->
-<section class="cta-section" id="waitlist" aria-labelledby="cta-heading">
-  <div class="cta-inner">
-    <span class="eyebrow" style="color:rgba(93,230,210,.7);display:block;margin-bottom:16px;">Get started</span>
-    <h2 id="cta-heading">Ready to see it in your environment?</h2>
-    <p>Book a 30-minute demo and we&#8217;ll walk through onboarding a client &#8212; live, inside your Microsoft 365 tenant.</p>
-    <div class="cta-actions">
-      <a href="/contact" class="btn-white">Book a Demo &#8594;</a>
-      <a href="/contact" class="btn-outline-white">Talk to the team</a>
-    </div>
-    <p class="cta-trust">No credit card required <span>&#183;</span> Live in your tenant same day <span>&#183;</span> Cancel anytime</p>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer" aria-label="Site footer">
-  <div class="wrap">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-logo"><img src="/images/logo-finperiti-footer.svg" alt="finperiti"></div>
-        <p>AML and KYC compliance for professional services &#8212; built natively inside Microsoft 365.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Product</h4>
-        <ul>
-          <li><a href="#solution">Solution</a></li>
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="/pricing">Pricing</a></li>
-          <li><a href="https://kind-river-07dda5b03.6.azurestaticapps.net/signup" target="_blank" rel="noopener">Sign in</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="/about">About &amp; Team</a></li>
-          <li><a href="mailto:team@finperiti.com">Contact</a></li>
-          <li><a href="#">Careers</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></li>
-          <li><a href="/terms-and-conditions" target="_blank" rel="noopener">Terms &amp; Conditions</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>&#169; 2026 finperiti Limited. All rights reserved. finperiti&#174; is a registered trademark of finperiti Ltd., registered in the European Union.</span>
-      <span><a href="mailto:team@finperiti.com">team@finperiti.com</a></span>
-    </div>
-  </div>
-</footer>
-
-<script>
-(function(){
-  var els = document.querySelectorAll('.rv');
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
-  }, { threshold: 0.08 });
-  els.forEach(function(el){ io.observe(el); });
-})();
-(function(){
-  var ham = document.getElementById('navHam');
-  var mob = document.getElementById('navMob');
-  if(!ham) return;
-  ham.addEventListener('click', function(){
-    var open = mob.classList.toggle('open');
-    ham.setAttribute('aria-expanded', open);
-  });
-})();
-</script>
-
-</body>
+    <script>
+      (function () {
+        var els = document.querySelectorAll(".rv");
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add("visible");
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.08 },
+        );
+        els.forEach(function (el) {
+          io.observe(el);
+        });
+      })();
+      (function () {
+        var ham = document.getElementById("navHam");
+        var mob = document.getElementById("navMob");
+        if (!ham) return;
+        ham.addEventListener("click", function () {
+          var open = mob.classList.toggle("open");
+          ham.setAttribute("aria-expanded", open);
+        });
+      })();
+    </script>
+  </body>
 </html>
