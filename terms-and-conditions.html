@@ -318,6 +318,14 @@
       }
       .nav-mob.open {
         display: flex;
+        position: fixed;
+        top: 65px;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        max-height: calc(100vh - 65px);
+        overflow-y: auto;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
       }
 
       /* HERO */
@@ -1746,6 +1754,12 @@
         ham.addEventListener("click", function () {
           var open = mob.classList.toggle("open");
           ham.setAttribute("aria-expanded", open);
+        });
+        mob.addEventListener("click", function (e) {
+          if (e.target.tagName === "A") {
+            mob.classList.remove("open");
+            ham.setAttribute("aria-expanded", "false");
+          }
         });
       })();
     </script>
