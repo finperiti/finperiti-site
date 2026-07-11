@@ -1,92 +1,121 @@
-# Finperiti — Static Site Recovery
+# finperiti.com — Marketing Site
 
-A faithful static clone of **www.finperiti.com**, reconstructed from the live site so it can be
-version-controlled and hosted on GitHub Pages.
+A fully self-contained, static marketing site for finperiti. No build step, no
+dependencies, no server-side code — just HTML files with all CSS, JavaScript, and
+images embedded inline (base64). It deploys as-is to Azure Static Web Apps.
 
-## Folder structure
+---
 
-```
-finperiti-site/
-├── index.html                 # Home ( was / )
-├── about-us.html              # ( was /about-us )
-├── pricing.html               # ( was /pricing )
-├── contact.html               # ( was /contact )
-├── terms-and-condition.html   # ( was /terms-and-condition )
-├── privacy-policy.html        # ( was /privacy-policy )
-├── css/
-│   └── finperiti.css          # Complete site stylesheet
-├── js/
-│   └── script.js              # Mobile menu toggle only (~40 lines, no dependencies)
-├── .nojekyll                  # Tells GitHub Pages to serve files as-is
-├── .gitignore
-└── README.md
-```
+## Contents
 
-## Deploy to GitHub Pages
+| File | Purpose |
+|------|---------|
+| `index.html` | Home page (hero, problem, solution, how-it-works, why-us, press, pricing, team, CTA) |
+| `about.html` | About Us — story + full team bios |
+| `pricing.html` | Pricing — Core Platform, modular add-ons, firm configurations |
+| `contact.html` | Contact — enquiry form (see "Contact form" below) |
+| `privacy-policy.html` | Privacy Policy |
+| `terms-and-conditions.html` | Terms & Conditions |
+| `finperiti-full-site.html` | **Preview only** — all pages merged into one file for offline review/sharing. Not part of the navigation; safe to keep or delete. |
+| `staticwebapp.config.json` | Azure routing (clean URLs like `/pricing`), security headers, 404 handling |
+| `.github/workflows/azure-static-web-apps.yml` | CI/CD — auto-deploys on every push to `main` |
+| `.gitignore` | Standard ignores |
 
+Every page shares the same nav, footer, brand palette (Petrol #0E4F5E, Jewel Teal
+#0E9F90, Ink #08191C, Bright Teal #5DE6D2, Steel #5B6B7C, Mist #EAF0F1) and fonts
+(Manrope + JetBrains Mono, loaded from Google Fonts).
+
+---
+
+## Deploy: GitHub → Azure Static Web Apps
+
+### Step 1 — Push to GitHub
 ```bash
-cd finperiti-site
+cd finperiti-deploy          # this folder
 git init
 git add .
-git commit -m "Recover finperiti.com as static site"
+git commit -m "Initial finperiti marketing site"
 git branch -M main
-git remote add origin https://github.com/<you>/<repo>.git
+git remote add origin https://github.com/<your-org>/<your-repo>.git
 git push -u origin main
 ```
 
-Then in the repo: **Settings → Pages → Source: Deploy from a branch → `main` / root**.
+### Step 2 — Create the Static Web App (one time)
+1. Go to **portal.azure.com** → *Create a resource* → **Static Web App**.
+2. **Basics:**
+   - Subscription / Resource group: your choice
+   - Name: e.g. `finperiti-web`
+   - Plan type: **Free** is fine for a marketing site
+   - Region: choose closest to your users (e.g. *West Europe*)
+3. **Deployment:** choose **GitHub**, authorise, then select your
+   Organisation / Repository / Branch (`main`).
+4. **Build Details:**
+   - Build Presets: **Custom**
+   - **App location:** `/`
+   - **Api location:** *(leave blank)*
+   - **Output location:** *(leave blank)*
+5. Click **Review + create** → **Create**.
 
-Pages are flat `.html` files with **relative links**, so the site works whether it is served
-from the domain root (`example.com/`) or a project subpath (`user.github.io/repo/`).
+Azure automatically commits a workflow file to your repo and runs the first
+deployment. If you prefer, the workflow in `.github/workflows/` here does the same
+thing — if Azure adds its own, you can delete one to avoid duplicates (keep whichever
+references your `AZURE_STATIC_WEB_APPS_API_TOKEN` secret).
 
-To use the finperiti.com custom domain, add a file named `CNAME` containing `www.finperiti.com`
-and configure DNS per GitHub's custom-domain docs. (Not included here so it doesn't interfere
-with a default deploy.)
+### Step 3 — Confirm the deployment secret
+Azure adds a repository secret named `AZURE_STATIC_WEB_APPS_API_TOKEN` automatically
+when you link the repo in the portal. The included workflow expects exactly that name.
+If you ever set it up manually: GitHub repo → *Settings* → *Secrets and variables* →
+*Actions* → add `AZURE_STATIC_WEB_APPS_API_TOKEN` with the deployment token from your
+Static Web App's *Manage deployment token* page.
 
-## What was preserved
+### Step 4 — Every future change
+Just push to `main`. The GitHub Action rebuilds and redeploys in ~1–2 minutes.
+Pull requests get their own temporary preview URL automatically.
 
-- All page text, headings, and copy — verbatim.
-- Full layout, colours, fonts (Poppins + Inter), and spacing — the original stylesheet is kept
-  intact, so rendering is pixel-faithful on desktop and mobile (verified via screenshots).
-- Images, icons, logos, and the dashboard graphic — these still load from the original Webflow
-  CDN URLs (`cdn.prod.website-files.com`), as agreed. See note below if you want them local.
-- Section anchors (`#the-solution`, `#advantages`) and team anchors (`#fiona`, `#richard`, …).
-- SEO metadata, Open Graph / Twitter tags, favicon, and the JSON-LD structured data.
+---
 
-## What changed (and why)
+## Custom domain (finperiti.com)
+In the Static Web App → **Custom domains** → add `www.finperiti.com`, then create the
+CNAME record Azure shows you at your DNS provider. Add the apex `finperiti.com` too if
+wanted (Azure supports apex via ALIAS/ANAME or the provided TXT validation).
 
-- **Internal links** rewritten from absolute (`/about-us`) to relative (`about-us.html`) for portability.
-- **Stylesheet** now loaded from `css/finperiti.css` instead of the CDN (SRI integrity hash removed,
-  since it applied to the CDN copy).
-- **JavaScript** — the original site loaded jQuery + several Webflow runtime scripts. These were
-  removed and replaced with a single ~40-line vanilla script that only drives the mobile hamburger
-  menu (the site's one interactive element). It reuses the classes/attributes the existing CSS
-  already defines, so the open/closed menu looks identical to the live site.
+---
 
-## ⚠️ Dynamic content that plain HTML/CSS cannot replicate
+## Clean URLs
+`staticwebapp.config.json` maps friendly paths to the files:
+- `/about` → `about.html`
+- `/pricing` → `pricing.html`
+- `/contact` → `contact.html`
+- `/privacy-policy` → `privacy-policy.html`
+- `/terms-and-conditions` → `terms-and-conditions.html`
+- Legacy `/about-us` and `/terms-and-condition` 301-redirect to the new paths.
 
-The live site was built in Webflow. These pieces depended on Webflow's hosted backend and will
-**not** function on static hosting without extra setup:
+The in-page navigation links use the `.html` filenames directly, so the site also
+works when opened straight from disk (no server needed).
 
-1. **Contact form** (`contact.html`) and **Waitlist form** (`index.html`).
-   Both submitted to Webflow's form-handling backend and used a Cloudflare Turnstile anti-bot
-   widget. On GitHub Pages the fields render and validate in-browser, but submissions go nowhere.
-   To make them work, point each `<form>` at a form service — e.g. Formspree, Basin, or Getform —
-   by setting `action="https://…"` and `method="post"`, or move hosting to a platform with built-in
-   forms (Netlify/Cloudflare Pages). The Turnstile widget can be dropped or re-keyed.
+---
 
-2. **Form success / error messages.** The "Thank you! / Oops!" blocks exist in the markup but were
-   shown/hidden by Webflow's JS after submission. Wire these up with your chosen form service.
+## Two things still to wire up before launch
 
-3. **"Get Started" button** links to the external signup app
-   (`kind-river-07dda5b03.6.azurestaticapps.net/signup`) — unchanged, still external.
+1. **Contact form endpoint.** `contact.html` currently falls back to opening the
+   visitor's email client (`mailto:team@finperiti.com`). To capture submissions
+   properly, set the `ENDPOINT` variable in the `<script>` block near the bottom of
+   `contact.html` to a Formspree URL or an Azure Function endpoint. When `ENDPOINT`
+   is set, the form POSTs JSON `{name, email, company, message}` and shows the inline
+   success/error message instead of opening email.
 
-4. **Scroll animations.** The live site had subtle Webflow scroll-in animations. These were purely
-   cosmetic (no content was hidden behind them), so they were dropped for a clean, dependency-free
-   build. Content appears immediately.
+2. **"Sign in" link.** The nav "Sign in" points at the raw Azure app URL
+   (`kind-river-...azurestaticapps.net/signup`). Replace with a branded subdomain
+   (e.g. `https://app.finperiti.com`) once DNS is set up. Search the files for
+   `kind-river` to find every occurrence.
 
-## Optional: fully self-host images
+---
 
-Images currently load from the Webflow CDN. If you'd rather not depend on it, download each asset
-into a local `images/` folder and replace the `cdn.prod.website-files.com/...` URLs. I can generate
-a script to do this automatically if you want the site to be 100% self-contained.
+## Editing
+No tooling required. Open any `.html` file in an editor, change the markup, commit,
+push. Because images are embedded as base64 they're large data URIs inside the HTML —
+use your editor's fold/minimap to skip past them, or search for the visible text you
+want to change.
+
+© 2026 finperiti Limited. finperiti® is a registered trademark of finperiti Ltd.,
+registered in the European Union.
