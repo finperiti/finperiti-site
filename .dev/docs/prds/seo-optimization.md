@@ -5,6 +5,21 @@
 
 ---
 
+## ⚠️ Note for AI Agents & Developers
+
+**For actual copy, messaging, and positioning to use on the website, refer to `./seo.md`**
+
+This document (`seo-optimization.md`) is a technical reference of what SEO implementations were made. The `seo.md` document is the **source of truth** for:
+- Company descriptions
+- Page headlines and subheadings
+- Key messaging and value propositions
+- Customer testimonials
+- Keywords and positioning
+
+When implementing SEO updates or modifying website copy, always reference `seo.md` first for the canonical messaging.
+
+---
+
 ## Executive Summary
 
 We've implemented a comprehensive SEO, AEO (Answer Engine Optimization), and GEO (Geographic Optimization) strategy to significantly improve finperiti.com's search engine visibility across Google, Bing, and AI-powered search engines.
